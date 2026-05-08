@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isValidEmail } from "../../lib/validate";
+import "../../styles/sim.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ export default function LoginPage() {
   return (
     <div className="app-shell">
       <div className="login-wrap">
+        <button className="back-arrow sim-back" aria-label="Back" onClick={()=>navigate("/")}/>
         <div className="card">
           <h1 className="brand">NurseSim</h1>
 
