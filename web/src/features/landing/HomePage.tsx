@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import landingBg from "../../assets/main_background.webp";
 import { GradientButton } from "../../components/GradientButton";
-import "../../styles/landing.css";
+import "../../styles/homePage.css";
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isValidEmail } from "../../lib/validate";
+import "../../styles/sim.css";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -78,7 +79,7 @@ export default function SignUpPage() {
         return;
       }
 
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.error("Signup error:", err);
       setErrors((prev) => ({
@@ -93,6 +94,7 @@ export default function SignUpPage() {
   return (
     <div className="app-shell">
       <div className="sign-up-wrap">
+        <button className="back-arrow sim-back" aria-label="Back" onClick={()=>navigate("/")}/>
         <div className="card">
           <h1 className="brand">Sign up</h1>
 

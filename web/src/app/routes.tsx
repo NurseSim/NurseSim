@@ -5,7 +5,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
 import LoginPage from "../features/auth/LoginPage";
 import SignUpPage from "../features/auth/SignUpPage";
-import { LandingPage } from "../features/landing/LandingPage";
+import { LandingPage } from "../features/landing/HomePage";
 import Landing from "../pages/Landing";
 import { ClassroomStudentsPage } from "../features/classroom/ClassroomStudentsPage";
 import { ClassroomPermissionsPage } from "../features/classroom/ClassroomPermissionsPage";

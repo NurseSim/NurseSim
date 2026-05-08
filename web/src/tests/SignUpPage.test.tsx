@@ -68,7 +68,7 @@ describe("SignUpPage", () => {
     expect(screen.queryByText(/Phone required\./i)).not.toBeNull();
   });
 
-  it("navigates to landing on valid input", async () => {
+  it("navigates to login screen on valid input", async () => {
   // Mock successful fetch response
   vi.stubGlobal("fetch", vi.fn(() =>
     Promise.resolve({
@@ -95,7 +95,7 @@ describe("SignUpPage", () => {
   // Wait for async effects
   await screen.findByText(/Sign Up/i); // Wait for component re-render (optional)
   
-  expect(mockedNavigate).toHaveBeenCalledWith("/");
+  expect(mockedNavigate).toHaveBeenCalledWith("/login");
 });
 
 it("shows server error when fetch fails", async () => {
