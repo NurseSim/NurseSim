@@ -6,7 +6,7 @@ import "./styles/globals.css";
 import "./styles/theme.css";
 import "./styles/layout.css";
 import "./styles/auth.css";
-import "./styles/landing.css";
+import "./styles/homePage.css"
 import "./styles/classroom.css";
 import "./styles/profile.css";
 import "./styles/sim.css";
