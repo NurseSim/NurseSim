@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { LandingPage } from "../features/landing/LandingPage";
+import { LandingPage } from "../features/landing/HomePage";
 import "@testing-library/jest-dom";
 
 // Mock react-router-dom
