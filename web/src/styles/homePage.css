@@ -1,10 +1,11 @@
-.landing-root {
+.landing-root.landing-root {
   background-size: cover;
   background-position: center;
   position: relative;
+  height: 100vh;
 }
 
-.landing-overlay {
+.landing-root .landing-overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -20,19 +21,20 @@
     transparent 60%
   );
 }
-.landing-title {
+
+.landing-root .landing-title {
   font-family: var(--font-display);
-  font-size: clamp(80px, 6vw, 64px);
+  font-size: clamp(64px, 6vw, 80px);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #ffffff;
 }
 
-.landing-buttons .gradient-button {
+.landing-root .landing-buttons .gradient-button {
   font-family: var(--font-body);
 }
 
-.landing-buttons {
+.landing-root .landing-buttons {
   display: flex;
   gap: 250px;
   flex-wrap: wrap;
@@ -41,7 +43,7 @@
   max-width: 90vw;
 }
 
-.gradient-button {
+.landing-root .gradient-button {
   min-width: 200px;
   padding: 18px 40px;
   border-radius: 24px;
@@ -59,14 +61,14 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.gradient-button:hover {
+.landing-root .gradient-button:hover {
   transform: translateY(-2px);
   box-shadow:
     0 18px 30px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
-.gradient-button:active {
+.landing-root .gradient-button:active {
   transform: translateY(1px);
   box-shadow:
     0 10px 18px rgba(0, 0, 0, 0.35),
