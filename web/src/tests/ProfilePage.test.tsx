@@ -23,7 +23,7 @@ vi.mock("../../components/SoftCard", () => ({
   ),
 }));
 
-vi.mock("../../lib/api", () => ({
+vi.mock("../lib/api", () => ({
   apiFetch: vi.fn().mockResolvedValue({
     data: {
       ok: true,
