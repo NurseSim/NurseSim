@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { ProfilePage } from "../features//profile/ProfilePage";
+import { ProfilePage } from "../features/profile/ProfilePage";
 
 // ---- mocks ----
 const navigateMock = vi.fn();
@@ -46,7 +46,7 @@ describe("ProfilePage", () => {
     render(<ProfilePage />);
 
     expect(await screen.findByText("John Doe")).toBeTruthy();
-    expect(await screen.findByText("@john@oshu.edu")).toBeTruthy();
+    expect(await screen.findByText("@john")).toBeTruthy();
   });
 
   it("renders all profile settings items", async () => {
