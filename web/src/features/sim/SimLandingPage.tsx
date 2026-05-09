@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import simBg from "../../assets/Final_Updated_Hospital_Bg.png";
+import simBg from "../../assets/final_updated_hospital_bg.webp";
 import { JoinClassForm } from "../classroom/JoinClassForm";
 import { useMyClass } from "../../hooks/useClasses";
 import { useMe } from "../../hooks/useMe";
@@ -17,6 +17,8 @@ export const SimLandingPage: React.FC = () => {
   const [joinSuccessName, setJoinSuccessName] = useState<string | null>(null);
 
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
+
+  const [showTutorialPopup, setShowTutorialPopup] = useState(false);
 
   const [level1Score, setLevel1Score] = useState<number | null>(null);
   const [level1Completed, setLevel1Completed] = useState(false);
@@ -154,7 +156,7 @@ export const SimLandingPage: React.FC = () => {
         </div>
 
         <div className="sim-landing-container">
-          <h1 className="sim-landing-title">NurseSim+ Curriculum</h1>
+          <h1 className="sim-landing-title">Courses I Am Taking</h1>
           {myClass && !joinSuccessName && (
             <p className="sim-landing-class-info">
               {myClass.name} — Levels {myClass.curriculum_levels.join(", ")}
@@ -178,88 +180,160 @@ export const SimLandingPage: React.FC = () => {
               <p>Learn how to use the NurseSim+ simulator</p>
             </button>
 
-            <button
-              className={`sim-level-button ${
-                noClassMessage || !canAccessLevel(1)
-                  ? "locked"
-                  : !tutorialCompleted
+            <div className="sim-level-button-container">
+              <button
+                className={`sim-level-button ${
+                  noClassMessage || !canAccessLevel(1)
                     ? "locked"
-                    : level1Completed
-                      ? level1Perfect
-                        ? "completed"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level1Completed
+                        ? level1Perfect
+                          ? "completed"
+                          : "available"
                         : "available"
-                      : "available"
-              }`}
-              onClick={() => tutorialCompleted && canAccessLevel(1) && handleLevelClick(1)}
-              disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(1)}
-            >
-              <div className="sim-level-header">
-                <h2>Level 1 Curriculum</h2>
-                {(!tutorialCompleted || !canAccessLevel(1)) && <span className="locked-badge">🔒 Locked</span>}
-                {tutorialCompleted && canAccessLevel(1) && level1Completed && level1Score !== null && (
-                  <span className="completed-badge">
-                    ✓ {level1Score}% {level1Perfect ? "🌟 Perfect!" : ""}
-                  </span>
-                )}
-              </div>
-              <p>Beginner level nursing scenarios</p>
-            </button>
+                }`}
+                onClick={() => tutorialCompleted && canAccessLevel(1) && handleLevelClick(1)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(1)}
+              >
+                <div className="sim-level-header">
+                  <h2>Level 1 Curriculum</h2>
+                  {(!tutorialCompleted || !canAccessLevel(1)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(1) && level1Completed && level1Score !== null && (
+                    <span className="completed-badge">
+                      ✓ {level1Score}% {level1Perfect ? "🌟 Perfect!" : ""}
+                    </span>
+                  )}
+                </div>
+                <p>Beginner level nursing scenarios</p>
+              </button>
+              {!tutorialCompleted && (
+                <button
+                  type="button"
+                  className="help-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTutorialPopup(true);
+                  }}
+                  aria-label="Why is this locked?"
+                >
+                  ?
+                </button>
+              )}
+            </div>
 
-            <button
-              className={`sim-level-button ${
-                noClassMessage || !canAccessLevel(2)
-                  ? "locked"
-                  : !tutorialCompleted
+            <div className="sim-level-button-container">
+              <button
+                className={`sim-level-button ${
+                  noClassMessage || !canAccessLevel(2)
                     ? "locked"
-                    : level2Completed
-                      ? level2Perfect
-                        ? "completed"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level2Completed
+                        ? level2Perfect
+                          ? "completed"
+                          : "available"
                         : "available"
-                      : "available"
-              }`}
-              onClick={() => tutorialCompleted && canAccessLevel(2) && handleLevelClick(2)}
-              disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(2)}
-            >
-              <div className="sim-level-header">
-                <h2>Level 2 Curriculum</h2>
-                {(!tutorialCompleted || !canAccessLevel(2)) && <span className="locked-badge">🔒 Locked</span>}
-                {tutorialCompleted && canAccessLevel(2) && level2Completed && level2Score !== null && (
-                  <span className="completed-badge">
-                    ✓ {level2Score}% {level2Perfect ? "🌟 Perfect!" : ""}
-                  </span>
-                )}
-              </div>
-              <p>Intermediate level nursing scenarios</p>
-            </button>
+                }`}
+                onClick={() => tutorialCompleted && canAccessLevel(2) && handleLevelClick(2)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(2)}
+              >
+                <div className="sim-level-header">
+                  <h2>Level 2 Curriculum</h2>
+                  {(!tutorialCompleted || !canAccessLevel(2)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(2) && level2Completed && level2Score !== null && (
+                    <span className="completed-badge">
+                      ✓ {level2Score}% {level2Perfect ? "🌟 Perfect!" : ""}
+                    </span>
+                  )}
+                </div>
+                <p>Intermediate level nursing scenarios</p>
+              </button>
+              {!tutorialCompleted && (
+                <button
+                  type="button"
+                  className="help-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTutorialPopup(true);
+                  }}
+                  aria-label="Why is this locked?"
+                >
+                  ?
+                </button>
+              )}
+            </div>
 
-            <button
-              className={`sim-level-button ${
-                noClassMessage || !canAccessLevel(3)
-                  ? "locked"
-                  : !tutorialCompleted
+            <div className="sim-level-button-container">
+              <button
+                className={`sim-level-button ${
+                  noClassMessage || !canAccessLevel(3)
                     ? "locked"
-                    : level3Completed
-                      ? level3Perfect
-                        ? "completed"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level3Completed
+                        ? level3Perfect
+                          ? "completed"
+                          : "available"
                         : "available"
-                      : "available"
-              }`}
-              onClick={() => tutorialCompleted && canAccessLevel(3) && handleLevelClick(3)}
-              disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(3)}
-            >
-              <div className="sim-level-header">
-                <h2>Level 3 Curriculum</h2>
-                {(!tutorialCompleted || !canAccessLevel(3)) && <span className="locked-badge">🔒 Locked</span>}
-                {tutorialCompleted && canAccessLevel(3) && level3Completed && level3Score !== null && (
-                  <span className="completed-badge">
-                    ✓ {level3Score}% {level3Perfect ? "🌟 Perfect!" : ""}
-                  </span>
-                )}
-              </div>
-              <p>Advanced level nursing scenarios</p>
-            </button>
+                }`}
+                onClick={() => tutorialCompleted && canAccessLevel(3) && handleLevelClick(3)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(3)}
+              >
+                <div className="sim-level-header">
+                  <h2>Level 3 Curriculum</h2>
+                  {(!tutorialCompleted || !canAccessLevel(3)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(3) && level3Completed && level3Score !== null && (
+                    <span className="completed-badge">
+                      ✓ {level3Score}% {level3Perfect ? "🌟 Perfect!" : ""}
+                    </span>
+                  )}
+                </div>
+                <p>Advanced level nursing scenarios</p>
+              </button>
+              {!tutorialCompleted && (
+                <button
+                  type="button"
+                  className="help-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTutorialPopup(true);
+                  }}
+                  aria-label="Why is this locked?"
+                >
+                  ?
+                </button>
+              )}
+            </div>
           </div>
         </div>
+
+        {showTutorialPopup && (
+          <div className="popup-overlay" onClick={() => setShowTutorialPopup(false)}>
+            <div className="popup-box tutorial-popup" onClick={(e) => e.stopPropagation()}>
+              {noClassMessage ? (
+                <>
+                  <h2>Join a class first</h2>
+                  <p className="popup-feedback">
+                    Use <strong>Join class</strong> at the top right to enroll. After you are in a class,
+                    complete the tutorial to unlock curriculum levels your instructor assigned.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>Complete the Tutorial First</h2>
+                  <p className="popup-feedback">
+                    Before you can access the curriculum levels, you must first complete the tutorial.
+                    The tutorial will teach you how to use the NurseSim+ simulator effectively.
+                  </p>
+                </>
+              )}
+              <button className="popup-close" onClick={() => setShowTutorialPopup(false)}>
+                Got it
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

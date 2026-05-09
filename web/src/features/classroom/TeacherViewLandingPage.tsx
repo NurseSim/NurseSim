@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import simBg from "../../assets/Final_Updated_Hospital_Bg.png";
+import simBg from "../../assets/final_updated_hospital_bg.webp";
 import { useClasses } from "../../hooks/useClasses";
 import { createClass } from "../../api/classes";
 import type { Class } from "../../api/classes";

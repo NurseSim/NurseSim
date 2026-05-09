@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/landing.css"; // or separate button.css
+import "../styles/homePage.css";
 
 interface GradientButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;

@@ -2,7 +2,6 @@
 import "../styles/ChatbotLayout.css";
 
 import { useState } from "react";
-import { API_BASE } from "../lib/api";
 
 /*
     Use in a simulation page by importing the component, then pasting this
@@ -25,7 +24,7 @@ export default function ChatbotComponent(){
         setInput("");
 
         try{
-            const res = await fetch(`${API_BASE}/api/chat`, {
+            const res = await fetch("http://localhost:5000/api/chat", {
                 method: "POST",
                 credentials: "include",
                 headers:{

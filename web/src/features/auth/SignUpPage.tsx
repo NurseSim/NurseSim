@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isValidEmail } from "../../lib/validate";
-import { API_BASE } from "../../lib/api";
+import "../../styles/sim.css";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ export default function SignUpPage() {
 
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/api/signup`, {
+      const res = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -77,7 +77,7 @@ export default function SignUpPage() {
         return;
       }
 
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.error("Signup error:", err);
       setErrors((prev) => ({
@@ -92,8 +92,9 @@ export default function SignUpPage() {
   return (
     <div className="app-shell">
       <div className="sign-up-wrap">
+        <button className="back-arrow sim-back" aria-label="Back" onClick={()=>navigate("/")}/>
         <div className="card">
-          <h1 className="brand">NurseSim</h1>
+          <h1 className="brand">Sign up</h1>
 
           <form onSubmit={handleSubmit} noValidate>
             {errors.form && <p className="error">{errors.form}</p>}

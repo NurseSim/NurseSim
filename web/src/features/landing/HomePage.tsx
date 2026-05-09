@@ -1,0 +1,30 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import landingBg from "../../assets/main_background.webp";
+import { GradientButton } from "../../components/GradientButton";
+import "../../styles/homePage.css";
+
+export const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="app-screen">
+      <div
+        className="app-screen-inner landing-root"
+        style={{ backgroundImage: `url(${landingBg})` }}
+      >
+        <div className="landing-overlay">
+          <h1 className="landing-title">OHSU NURSE SIM+</h1>
+          <div className="landing-buttons">
+            <GradientButton onClick={() => navigate("/sim")}>
+              Student View
+            </GradientButton>
+            <GradientButton onClick={() => navigate("/teacher")}>
+              Teacher View
+            </GradientButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
