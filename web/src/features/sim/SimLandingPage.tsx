@@ -125,9 +125,6 @@ export const SimLandingPage: React.FC = () => {
         <button className="back-arrow sim-back" aria-label="Back" onClick={() => navigate("/landing")} />
 
         <div className="sim-join-widget">
-          {isTeacher && (
-            <span className="sim-join-widget-class">All levels</span>
-          )}
           {!isTeacher && !classLoading && myClass != null && (
             <span className="sim-join-widget-class">
               {joinSuccessName ? `Joined ${joinSuccessName}` : myClass.name}
