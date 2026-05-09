@@ -1,5 +1,6 @@
+import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ProfilePage } from "../features//profile/ProfilePage";
 
 // ---- mocks ----
@@ -22,19 +23,33 @@ vi.mock("../../components/SoftCard", () => ({
   ),
 }));
 
+vi.mock("../../lib/api", () => ({
+  apiFetch: vi.fn().mockResolvedValue({
+    data: {
+      ok: true,
+      user: {
+        first_name: "John",
+        last_name: "Doe",
+        student_id: "12345",
+        email: "john@oshu.edu",
+      },
+    },
+  }),
+}));
+
 describe("ProfilePage", () => {
   beforeEach(() => {
     navigateMock.mockClear();
   });
 
-  it("renders the user name and handle", () => {
+  it("renders the user name and handle", async () => {
     render(<ProfilePage />);
 
-    expect(screen.getByText("Kiana Shim")).toBeTruthy();
-    expect(screen.getByText("@KianShim")).toBeTruthy();
+    expect(await screen.findByText("John Doe")).toBeTruthy();
+    expect(await screen.findByText("@john@oshu.edu")).toBeTruthy();
   });
 
-  it("renders all profile settings items", () => {
+  it("renders all profile settings items", async () => {
     render(<ProfilePage />);
 
     const settingsItems = [
@@ -46,8 +61,10 @@ describe("ProfilePage", () => {
       "Storage",
     ];
 
-    settingsItems.forEach((item) => {
-      expect(screen.getByText(item)).toBeTruthy();
+    await waitFor(() => {
+      settingsItems.forEach((item) => {
+        expect(screen.getByText(item)).toBeTruthy();
+      });
     });
   });
 
