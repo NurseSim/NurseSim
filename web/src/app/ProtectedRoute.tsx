@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { AppLayout } from "../components/AppLayout.tsx";
 
 const API_BASE = "http://localhost:5000";
 
@@ -49,5 +50,5 @@ export const ProtectedRoute: React.FC<Props> = ({ children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <AppLayout>{children}</AppLayout>;
 };
