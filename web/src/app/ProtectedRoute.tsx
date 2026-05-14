@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { API_BASE } from "../lib/api";
 import { AppLayout } from "../components/AppLayout.tsx";
+
+const API_BASE = "http://localhost:5000";
 
 type Props = { children: React.ReactNode };
 
