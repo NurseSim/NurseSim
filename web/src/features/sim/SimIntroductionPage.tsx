@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import simBg from "../../assets/final_updated_hospital_bg.webp";
 import duckIcon from "../../assets/full_duck.webp";
 import "../../styles/sim.css";
-
 import { useState } from "react";
 import ChatbotComponent from "../../components/Chatbot";
-
 
 export const SimIntroductionPage: React.FC = () => {
   const navigate = useNavigate();

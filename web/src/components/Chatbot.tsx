@@ -1,7 +1,7 @@
 // ChatbotLayout.js
 import "../styles/ChatbotLayout.css";
 
-import {useState} from "react";
+import { useState } from "react";
 
 /*
     Use in a simulation page by importing the component, then pasting this
@@ -26,6 +26,7 @@ export default function ChatbotComponent(){
         try{
             const res = await fetch("http://localhost:5000/api/chat", {
                 method: "POST",
+                credentials: "include",
                 headers:{
                     "Content-Type": "application/json"
                 },
