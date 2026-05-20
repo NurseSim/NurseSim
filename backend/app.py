@@ -197,28 +197,42 @@ def signup():
 def me():
     user_id = session.get("user_id")
     if not user_id:
-        return jsonify({"ok": True, "user": None})
+        return jsonify({"ok": False, "error": "Not authenticated"}), 401
+
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT id, first_name, last_name, email, teacher FROM users WHERE id = %s;",
+        """
+        SELECT id,
+               first_name,
+               last_name,
+               student_id,
+               phone_number,
+               email,
+               teacher
+        FROM users
+        WHERE id = %s;
+        """,
         (user_id,),
     )
     row = cur.fetchone()
     cur.close()
     conn.close()
+
     if not row:
-        return jsonify({"ok": True, "user": None})
-    return jsonify({
-        "ok": True,
-        "user": {
-            "id": row[0],
-            "first_name": row[1],
-            "last_name": row[2],
-            "email": row[3],
-            "teacher": bool(row[4]) if row[4] is not None else False,
-        },
-    })
+        session.clear()
+        return jsonify({"ok": False, "error": "User not found"}), 401
+
+    user = {
+        "id": row[0],
+        "email": row[1],
+        "teacher": row[2],
+        "first_name": row[3],
+        "last_name": row[4],
+        "student_id": row[5],
+        "phone_number": row[6],
+    }
+    return jsonify({"ok": True, "user": user, "user_id": user["id"]})
 
 
 def require_user():
