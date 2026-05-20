@@ -225,12 +225,12 @@ def me():
 
     user = {
         "id": row[0],
-        "first_name": row[1],
-        "last_name": row[2],
-        "student_id": row[3],
-        "phone_number": row[4],
-        "email": row[5],
-        "teacher": row[6],
+        "email": row[1],
+        "teacher": row[2],
+        "first_name": row[3],
+        "last_name": row[4],
+        "student_id": row[5],
+        "phone_number": row[6],
     }
     return jsonify({"ok": True, "user": user, "user_id": user["id"]})
 
