@@ -289,4 +289,4 @@ Host github.com
 - Kiana - [GitHub](https://github.com/KianaIShim) • [shimk@oregonstate.edu](mailto:shimk@oregonstate.edu)
 - Aidan - [GitHub](https://github.com/dalyai33) • [dalyai@oregonstate.edu](mailto:dalyai@oregonstate.edu)
 - Francisco - [GitHub](https://github.com/) •
-- Ian - [GitHub](https://github.com/) •
+- Ian - [GitHub](https://github.com/) • [halei@oregonstate.edu](mailto:halei@oregonstate.edu)
