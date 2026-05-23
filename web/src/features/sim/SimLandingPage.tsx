@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import simBg from "../../assets/final_updated_hospital_bg.webp";
+import { JoinClassForm } from "../classroom/JoinClassForm";
+import { useMyClass } from "../../hooks/useClasses";
+import { useMe } from "../../hooks/useMe";
+import { API_BASE } from "../../lib/api";
 import "../../styles/sim.css";
 
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -9,6 +13,11 @@ const API_BASE = import.meta.env.VITE_API_URL;
 export const SimLandingPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user: me } = useMe();
+  const { class: myClass, loading: classLoading, refetch } = useMyClass();
+  const isTeacher = Boolean(me?.teacher);
+  const [joinOpen, setJoinOpen] = useState(false);
+  const [joinSuccessName, setJoinSuccessName] = useState<string | null>(null);
 
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
 
@@ -103,18 +112,61 @@ export const SimLandingPage: React.FC = () => {
   const level2Perfect = level2Score === 100;
   const level3Perfect = level3Score === 100;
 
+  const allowedLevels = isTeacher ? [1, 2, 3] : (myClass?.curriculum_levels ?? []);
+  const canAccessLevel = (level: number) => allowedLevels.includes(level);
+  const noClassMessage = !isTeacher && !classLoading && myClass === null;
+
+  function onJoined(c: { name: string }) {
+    setJoinSuccessName(c.name);
+    setJoinOpen(false);
+    refetch();
+  }
+
   return (
     <div className="app-screen">
       <div className="app-screen-inner sim-root" style={{ backgroundImage: `url(${simBg})` }}>
         <button className="back-arrow sim-back" aria-label="Back" onClick={() => navigate("/landing")} />
 
+        <div className="sim-join-widget">
+          {!isTeacher && !classLoading && myClass === null && (
+            <>
+              <button
+                type="button"
+                className="sim-join-widget-trigger"
+                onClick={() => setJoinOpen((o) => !o)}
+                aria-expanded={joinOpen}
+                aria-haspopup="dialog"
+              >
+                Join class
+              </button>
+              {joinOpen && (
+                <div className="sim-join-widget-dropdown" role="dialog" aria-label="Join a class by code">
+                  <JoinClassForm
+                    onJoined={onJoined}
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
         <div className="sim-landing-container">
           <h1 className="sim-landing-title">Courses I Am Taking</h1>
+          {myClass && !joinSuccessName && (
+            <p className="sim-landing-class-info">
+              {myClass.name} — Levels {myClass.curriculum_levels.join(", ")}
+            </p>
+          )}
+
+          {noClassMessage && (
+            <p className="sim-landing-no-class-hint">Join a class (top right) to unlock the sim.</p>
+          )}
 
           <div className="sim-level-selection">
             <button
               className={`sim-level-button ${tutorialCompleted ? "completed" : "primary"}`}
               onClick={handleTutorialClick}
+              disabled={!!noClassMessage}
             >
               <div className="sim-level-header">
                 <h2>Tutorial</h2>
@@ -126,34 +178,39 @@ export const SimLandingPage: React.FC = () => {
             <div className="sim-level-button-container">
               <button
                 className={`sim-level-button ${
-                  !tutorialCompleted ? "locked" : level1Completed ? (level1Perfect ? "completed" : "available") : "available"
+                  noClassMessage || !canAccessLevel(1)
+                    ? "locked"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level1Completed
+                        ? level1Perfect
+                          ? "completed"
+                          : "available"
+                        : "available"
                 }`}
-                onClick={() => tutorialCompleted && handleLevelClick(1)}
-                disabled={!tutorialCompleted}
+                onClick={() => tutorialCompleted && canAccessLevel(1) && handleLevelClick(1)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(1)}
               >
                 <div className="sim-level-header">
                   <h2>Level 1 Curriculum</h2>
-
-                  {!tutorialCompleted && <span className="locked-badge">🔒 Locked</span>}
-
-                  {tutorialCompleted && level1Completed && level1Score !== null && (
+                  {(!tutorialCompleted || !canAccessLevel(1)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(1) && level1Completed && level1Score !== null && (
                     <span className="completed-badge">
                       ✓ {level1Score}% {level1Perfect ? "🌟 Perfect!" : ""}
                     </span>
                   )}
                 </div>
-
                 <p>Beginner level nursing scenarios</p>
               </button>
-
               {!tutorialCompleted && (
                 <button
+                  type="button"
                   className="help-button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowTutorialPopup(true);
                   }}
-                  aria-label="Help"
+                  aria-label="Why is this locked?"
                 >
                   ?
                 </button>
@@ -162,16 +219,24 @@ export const SimLandingPage: React.FC = () => {
 
             <div className="sim-level-button-container">
               <button
-                 className={`sim-level-button ${
-                  !tutorialCompleted ? "locked" : level2Completed ? (level2Perfect ? "completed" : "available") : "available"
+                className={`sim-level-button ${
+                  noClassMessage || !canAccessLevel(2)
+                    ? "locked"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level2Completed
+                        ? level2Perfect
+                          ? "completed"
+                          : "available"
+                        : "available"
                 }`}
-                onClick={() => tutorialCompleted && handleLevelClick(2)}
-                disabled={!tutorialCompleted}
+                onClick={() => tutorialCompleted && canAccessLevel(2) && handleLevelClick(2)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(2)}
               >
                 <div className="sim-level-header">
                   <h2>Level 2 Curriculum</h2>
-                  {!tutorialCompleted && <span className="locked-badge">🔒 Locked</span>}
-                  {tutorialCompleted && level2Completed && level2Score !== null && (
+                  {(!tutorialCompleted || !canAccessLevel(2)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(2) && level2Completed && level2Score !== null && (
                     <span className="completed-badge">
                       ✓ {level2Score}% {level2Perfect ? "🌟 Perfect!" : ""}
                     </span>
@@ -179,15 +244,15 @@ export const SimLandingPage: React.FC = () => {
                 </div>
                 <p>Intermediate level nursing scenarios</p>
               </button>
-
               {!tutorialCompleted && (
                 <button
+                  type="button"
                   className="help-button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowTutorialPopup(true);
                   }}
-                  aria-label="Help"
+                  aria-label="Why is this locked?"
                 >
                   ?
                 </button>
@@ -196,16 +261,24 @@ export const SimLandingPage: React.FC = () => {
 
             <div className="sim-level-button-container">
               <button
-                 className={`sim-level-button ${
-                  !tutorialCompleted ? "locked" : level3Completed ? (level3Perfect ? "completed" : "available") : "available"
+                className={`sim-level-button ${
+                  noClassMessage || !canAccessLevel(3)
+                    ? "locked"
+                    : !tutorialCompleted
+                      ? "locked"
+                      : level3Completed
+                        ? level3Perfect
+                          ? "completed"
+                          : "available"
+                        : "available"
                 }`}
-                onClick={() => tutorialCompleted && handleLevelClick(3)}
-                disabled={!tutorialCompleted}
+                onClick={() => tutorialCompleted && canAccessLevel(3) && handleLevelClick(3)}
+                disabled={!!noClassMessage || !tutorialCompleted || !canAccessLevel(3)}
               >
                 <div className="sim-level-header">
                   <h2>Level 3 Curriculum</h2>
-                  {!tutorialCompleted && <span className="locked-badge">🔒 Locked</span>}
-                  {tutorialCompleted && level3Completed && level3Score !== null && (
+                  {(!tutorialCompleted || !canAccessLevel(3)) && <span className="locked-badge">🔒 Locked</span>}
+                  {tutorialCompleted && canAccessLevel(3) && level3Completed && level3Score !== null && (
                     <span className="completed-badge">
                       ✓ {level3Score}% {level3Perfect ? "🌟 Perfect!" : ""}
                     </span>
@@ -213,15 +286,15 @@ export const SimLandingPage: React.FC = () => {
                 </div>
                 <p>Advanced level nursing scenarios</p>
               </button>
-
               {!tutorialCompleted && (
                 <button
+                  type="button"
                   className="help-button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowTutorialPopup(true);
                   }}
-                  aria-label="Help"
+                  aria-label="Why is this locked?"
                 >
                   ?
                 </button>
@@ -233,11 +306,23 @@ export const SimLandingPage: React.FC = () => {
         {showTutorialPopup && (
           <div className="popup-overlay" onClick={() => setShowTutorialPopup(false)}>
             <div className="popup-box tutorial-popup" onClick={(e) => e.stopPropagation()}>
-              <h2>Complete the Tutorial First</h2>
-              <p className="popup-feedback">
-                Before you can access the curriculum levels, you must first complete the tutorial.
-                The tutorial will teach you how to use the NurseSim+ simulator effectively.
-              </p>
+              {noClassMessage ? (
+                <>
+                  <h2>Join a class first</h2>
+                  <p className="popup-feedback">
+                    Use <strong>Join class</strong> at the top right to enroll. After you are in a class,
+                    complete the tutorial to unlock curriculum levels your instructor assigned.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>Complete the Tutorial First</h2>
+                  <p className="popup-feedback">
+                    Before you can access the curriculum levels, you must first complete the tutorial.
+                    The tutorial will teach you how to use the NurseSim+ simulator effectively.
+                  </p>
+                </>
+              )}
               <button className="popup-close" onClick={() => setShowTutorialPopup(false)}>
                 Got it
               </button>

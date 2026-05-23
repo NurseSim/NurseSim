@@ -11,7 +11,7 @@ type ApiOptions = Omit<RequestInit, "body"> & {
 export async function apiFetch<T>(
   path: string,
   options: ApiOptions = {}
-): Promise<{ data: T }> {
+): Promise<{ data: T; ok: boolean; status: number }> {
   const res = await fetch(`${API_URL}${path}`, {
     method: options.method || "GET",
     credentials: "include",
@@ -21,21 +21,21 @@ export async function apiFetch<T>(
     },
     body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
   });
+  const data = (await res.json().catch(() => ({}))) as T;
+  return { data, ok: res.ok, status: res.status };
+}
 
-  let data: T;
-  try {
-    data = await res.json();
-  } catch {
-    throw new Error("Invalid JSON response");
-  }
+export type MeUser = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  teacher: boolean;
+};
 
-  if (!res.ok) {
-    const message =
-      typeof data === "object" && data !== null && "error" in (data as Record<string, unknown>)
-        ? String((data as Record<string, unknown>).error)
-        : `API error: ${res.status}`;
-    throw new Error(message);
-  }
+export type MeResponse = { ok: boolean; user: MeUser | null };
 
-  return { data };
+export async function getMe(): Promise<MeResponse> {
+  const { data } = await apiFetch<MeResponse>("/api/me");
+  return data;
 }
