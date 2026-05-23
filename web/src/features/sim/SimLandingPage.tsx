@@ -7,8 +7,6 @@ import { useMe } from "../../hooks/useMe";
 import { API_BASE } from "../../lib/api";
 import "../../styles/sim.css";
 
-const API_BASE = import.meta.env.VITE_API_URL;
-
 
 export const SimLandingPage: React.FC = () => {
   const navigate = useNavigate();
